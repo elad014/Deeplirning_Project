@@ -71,7 +71,7 @@ def log_result(
     lr: float,
     epochs_trained: int,
     train_acc: Optional[float],
-    test_acc: float,
+    test_acc: Optional[float],
     notes: str = "",
 ) -> None:
     """
@@ -88,7 +88,7 @@ def log_result(
     lr             : learning rate used
     epochs_trained : actual number of epochs run (after early stopping)
     train_acc      : final training accuracy [0-1], or None if not applicable
-    test_acc       : final / best test accuracy [0-1]
+    test_acc       : final / best test accuracy [0-1], or None if not applicable
     notes          : any free-text remarks
     """
     if os.path.exists(RESULTS_FILE):
@@ -103,7 +103,7 @@ def log_result(
     next_row = ws.max_row + 1
 
     train_acc_pct = round(train_acc * 100, 2) if train_acc is not None else "N/A"
-    test_acc_pct  = round(test_acc  * 100, 2)
+    test_acc_pct  = round(test_acc  * 100, 2) if test_acc  is not None else "N/A"
 
     row_values = [
         datetime.now().strftime("%Y-%m-%d %H:%M"),

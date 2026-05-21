@@ -318,7 +318,7 @@ def pretrain_autoencoder(
         lr=AE_LR,
         epochs_trained=epochs_trained,
         train_acc=None,
-        test_acc=0.0,
+        test_acc=None,
         notes=f"MSE reconstruction on 100k unlabeled images. Final recon loss: {final_loss:.6f}",
     )
 
@@ -480,6 +480,13 @@ def main() -> None:
             fresh_encoder, freeze, train_loader, test_loader, DEVICE
         )
         results.append(("frozen encoder" if freeze else "full fine-tune", acc))
+
+        # Free GPU memory before the next run
+        del fresh_encoder
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.synchronize()
+        print(f"  GPU memory cleared after classifier ({'frozen' if freeze else 'full'})")
 
     print(f"\n{'='*60}")
     print("  Stage C — Summary")

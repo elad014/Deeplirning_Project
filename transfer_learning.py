@@ -305,6 +305,13 @@ def main() -> None:
         )
         results.append((model_name, "frozen" if frozen else "full fine-tune", acc))
 
+        # Free GPU memory before the next experiment
+        del model
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.synchronize()
+        print(f"  GPU memory cleared after {model_name} ({'frozen' if frozen else 'full'})")
+
     print(f"\n{'='*60}")
     print("  Stage B — Summary")
     print(f"{'='*60}")

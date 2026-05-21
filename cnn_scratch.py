@@ -299,6 +299,11 @@ def main() -> None:
         notes="4-block VGG backbone + Sigmoid head, CosineAnnealingLR, EarlyStopping",
     )
 
+    del model, optimizer, scheduler, scaler
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
+
 
 if __name__ == "__main__":
     main()
